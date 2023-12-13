@@ -86,27 +86,31 @@ void displayinfo(){
 
 }
 
-void deleteEmployee(int targetId) {
-    FILE *originalFile = fopen("employee_details.txt", "r");
-    FILE *tempFile = fopen("temp_employee_details.txt", "w");
+void deleterecords() {
 
-    
+    int deleteid;
+
+    printf("Enter the employee's id of which you want to delete the record:\n");
+    scanf("%d",&deleteid);
+
+    FILE *fp = fopen("employee_details.txt", "r");
+    FILE *temp = fopen("temp_employee_details.txt", "w");
 
     struct Employee emp;
 
-    while (fread(&emp, sizeof(struct Employee), 1, originalFile)) {
-        if (emp.id != targetId) {
-            fwrite(&emp, sizeof(struct Employee), 1, tempFile);
+    while (fread(&emp, sizeof(struct Employee), 1, fp)) {
+        if (emp.id != deleteid) {
+            fwrite(&emp, sizeof(struct Employee), 1, temp);
         }
     }
 
-    fclose(originalFile);
-    fclose(tempFile);
+    fclose(fp);
+    fclose(temp);
 
     remove("employee_details.txt");
     rename("temp_employee_details.txt", "employee_details.txt");
 
-    printf("Employee with ID %d deleted successfully.\n", targetId);
+    printf("Employee with ID %d deleted successfully.\n", deleteid);
 }
 
 
