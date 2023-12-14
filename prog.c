@@ -88,7 +88,7 @@ void displayinfo(){
 
 void deleterecords(int deleteid) {
     FILE *fp = fopen("employee_details.txt", "r+");
-    FILE *temp= fopen("temp_employee_details.txt", "w");
+    FILE *temp= fopen("temp_employee_details.txt", "w+");
 
     struct Employee emp;
    
@@ -112,15 +112,65 @@ void deleterecords(int deleteid) {
 }
 
 
-void updaterecord(FILE *file,int updateid){
+void updaterecord(int updateid){
 
-    FILE *temp = tmpfile();
+    FILE *fp = fopen("employee_details.txt","r+");
+    FILE *tempfile = fopen("temp_employee_details2.txt","a+") ;
 
-    struct Employee e1;
+    struct Employee emp;
+
+    while (fscanf(fp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                  &emp.id, emp.name, emp.designation, emp.department,
+                  emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8){
+        if (emp.id != updateid) {
+            fprintf(tempfile, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                    emp.id, emp.name, emp.designation, emp.department,
+                    emp.doj, emp.salary, emp.increment, emp.decrement);
+
+                  }
+    }
+
+    int flag = 0;
+    struct Employee *emp1 = (struct Employee *)malloc(sizeof(struct Employee));
+
+
+        printf("Enter the Employee ID:\n");
+        scanf("%d",&(emp1)->id);
+
+        printf("Enter the Employee name:\n");
+        scanf(" %[^\n]",(emp1)->name);
+
+        printf("Enter the designation:\n");
+        scanf(" %[^\n]",(emp1)->designation);
+
+        printf("Enter Employee's department:\n");
+        scanf(" %[^\n]",(emp1)->department);
+
+        printf("Enter date of joining of the Employee(DD/MM/YYYY):\n");
+        scanf(" %[^\n]",(emp1)->doj);
+
+        printf("Enter the Employee's monthly salary(in rupees):\n");
+        scanf("%d",&(emp1)->salary);
+
+        printf("Enter the increment precentage(per annum):\n");
+        scanf("%d",&(emp1)->increment);
+
+        printf("Enter the decrement percentage(per annum):\n");
+        scanf("%d",&(emp1)->decrement);
+        
+        fprintf(tempfile,"Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                        (emp1)->id,(emp1)->name,(emp1)->designation,(emp1)->department,(emp1)->doj,
+                        (emp1)->salary,(emp1)->increment,(emp1)->decrement);
+        
+        flag++; 
 
     
 
+    fclose(fp);
+    fclose(tempfile);
 
+    remove("employee_details.txt");
+    rename("temp_employee_details2.txt","employee_details.txt");
 
 
 }
@@ -144,6 +194,7 @@ int main(){
 
         case 1: enteremployee();
                 break;
+
         case 2: displayinfo();
                 break;  
 
@@ -154,13 +205,12 @@ int main(){
 
                 deleterecords(deleteid);
                 break;
-        case 4: FILE *file = fopen("employee_details.txt","r+");
 
-                int updateid;
+        case 4: int updateid;
                 printf("\nEnter the ID of the employee to update records: ");
                 scanf("%d", &updateid);
                 
-                updaterecord(file, updateid);
+                updaterecord(updateid);
                 break;
         case 5: return 0;       
     }    
