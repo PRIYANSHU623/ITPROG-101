@@ -35,7 +35,7 @@ void enteremployee(){
         printf("Enter the Employee name:\n");
         scanf(" %[^\n]",(e + i)->name);
 
-        printf("Enter the des:\n");
+        printf("Enter the designation:\n");
         scanf(" %[^\n]",(e + i)->designation);
 
         printf("Enter Employee's department:\n");
@@ -53,7 +53,7 @@ void enteremployee(){
         printf("Enter the decrement percentage(per annum):\n");
         scanf("%d",&((e + i))->decrement);
         
-        fprintf(fp,"\n %d \t\t\t\t %s \t\t\t\t %s \t\t\t\t %s \t\t\t\t %s \t\t\t\t %d \t\t\t\t\t %d \t\t\t\t\t %d \n\n",
+        fprintf(fp,"Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
                         (e + i)->id,(e + i)->name,(e+i)->designation,(e+i)->department,(e+i)->doj,
                         (e+i)->salary,(e+i)->increment,(e+i)->decrement);
         
@@ -86,33 +86,52 @@ void displayinfo(){
 
 }
 
-void deleterecords() {
-
-    int deleteid;
-
-    printf("Enter the employee's id of which you want to delete the record:\n");
-    scanf("%d",&deleteid);
-
+void deleterecords(int deleteid) {
     FILE *fp = fopen("employee_details.txt", "r");
-    FILE *temp = fopen("temp_employee_details.txt", "w");
+    FILE *temp= fopen("temp_employee_details.txt", "w");
 
     struct Employee emp;
-
-    while (fread(&emp, sizeof(struct Employee), 1, fp)) {
+   
+    while (fscanf(fp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                  &emp.id, emp.name, emp.designation, emp.department,
+                  emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8) {
         if (emp.id != deleteid) {
-            fwrite(&emp, sizeof(struct Employee), 1, temp);
+            fprintf(temp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                    emp.id, emp.name, emp.designation, emp.department,
+                    emp.doj, emp.salary, emp.increment, emp.decrement);
         }
+    }
+
+    rewind(fp);
+    rewind(temp);
+
+    while ((fscanf(temp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                    &emp.id, emp.name, emp.designation, emp.department,
+                    emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8)) {
+        fprintf(fp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                emp.id, emp.name, emp.designation, emp.department,
+                emp.doj, emp.salary, emp.increment, emp.decrement);
     }
 
     fclose(fp);
     fclose(temp);
 
-    remove("employee_details.txt");
-    rename("temp_employee_details.txt", "employee_details.txt");
-
     printf("Employee with ID %d deleted successfully.\n", deleteid);
 }
 
+
+void updaterecord(FILE *file,int updateid){
+
+    FILE *temp = tmpfile();
+
+    struct Employee e1;
+
+    
+
+
+
+
+}
 
 
 
@@ -123,7 +142,7 @@ int main(){
     printf("\t\tWelcome to our program.");
 
     while(1){
-    printf("\n\n What do you wish to do? \n1.Enter Employee Records.\n2.Display all the Employee records.\n3.Delete an Employee Record.\n4.Exit.\n\n");
+    printf("\n\n What do you wish to do? \n1.Enter Employee Records.\n2.Display all the Employee records.\n3.Delete an Employee Record.\n4.Update Employee Records.\n5.Exit\n\n");
 
     printf("\n\nSelect your choice: ");
     scanf("%d",&choice);
@@ -135,9 +154,23 @@ int main(){
                 break;
         case 2: displayinfo();
                 break;  
-        case 3: deleterecords();
+
+        case 3: 
+                int deleteid;
+                printf("\nEnter the Employee ID to be deleted:");
+                scanf("%d",&deleteid);
+
+                deleterecords(deleteid);
                 break;
-        case 4: return 0;       
+        case 4: FILE *file = fopen("employee_details.txt","r+");
+
+                int updateid;
+                printf("\nEnter the ID of the employee to update records: ");
+                scanf("%d", &updateid);
+                
+                updaterecord(file, updateid);
+                break;
+        case 5: return 0;       
     }    
 
     }
