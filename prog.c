@@ -87,35 +87,27 @@ void displayinfo(){
 }
 
 void deleterecords(int deleteid) {
-    FILE *fp = fopen("employee_details.txt", "r");
+    FILE *fp = fopen("employee_details.txt", "r+");
     FILE *temp= fopen("temp_employee_details.txt", "w");
 
     struct Employee emp;
    
     while (fscanf(fp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
                   &emp.id, emp.name, emp.designation, emp.department,
-                  emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8) {
+                  emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8){
         if (emp.id != deleteid) {
             fprintf(temp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
                     emp.id, emp.name, emp.designation, emp.department,
                     emp.doj, emp.salary, emp.increment, emp.decrement);
-        }
+
+                  }
     }
-
-    rewind(fp);
-    rewind(temp);
-
-    while ((fscanf(temp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
-                    &emp.id, emp.name, emp.designation, emp.department,
-                    emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8)) {
-        fprintf(fp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
-                emp.id, emp.name, emp.designation, emp.department,
-                emp.doj, emp.salary, emp.increment, emp.decrement);
-    }
-
-    fclose(fp);
     fclose(temp);
+    fclose(fp);
 
+    remove("employee_details.txt");
+    rename("temp_employee_details.txt", "employee_details.txt");
+    
     printf("Employee with ID %d deleted successfully.\n", deleteid);
 }
 
