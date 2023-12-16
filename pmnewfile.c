@@ -256,6 +256,27 @@ void AvgSalary()
                   printf("Average salary of all the employee is : %d",Avg);
                   fclose(fp);
 }
+void SalaryRange()
+{
+    int max,min;
+    printf("Enter Maximum value : ");
+    scanf("%d",&max);
+    printf("Enter the Minimum value : ");
+    scanf("%d",&min);
+    FILE * fp=fopen("employee_details.txt","r+");
+    struct Employee emp;
+    int i;
+    while (fscanf(fp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                  &emp.id, emp.name, emp.designation, emp.department,
+                  emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8)
+                  {
+                       if(emp.salary<=max && emp.salary>=min)
+                       {
+                        i++;
+                       }
+                  }
+                printf("%d",i);
+}
 
 
 
