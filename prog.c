@@ -193,7 +193,7 @@ void net_salary()
                   emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8) 
                     {
                         
-                        emp.salary=emp.salary +(emp.increment/100*emp.salary)-(emp.decrement/100*emp.salary);
+                        emp.salary=emp.salary +(emp.increment/100.0*emp.salary)-(emp.decrement/100.0*emp.salary);
                         fprintf(f,"%d",emp.salary);
                         printf("\nThe salary of Employee Id %d is :%d\n",emp.id,emp.salary);
                     }
