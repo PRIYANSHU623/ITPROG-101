@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 struct Employee{                //This declares a struct type containing all information of a employee globally            
 
@@ -176,20 +176,75 @@ void updaterecord(int updateid){
 }
 
 
+void searchrecord(){
+
+    int searchid;
+    char designation1[30];
+    char department1[30];
+    char doj1[10];
+
+    printf("\nPlease enter the ID of the Employee of be reached:");
+    scanf("%d",&searchid);
+
+    printf("\nPlease enter the designation of the Employee:");
+    scanf(" %[^\n]s",designation1);
+
+    printf("\nPlease enter the department of the Employee:");
+    scanf(" %[^\n]s",department1);
+
+    printf("\nPlease enter the date of joining of the Employee:");
+    scanf(" %[^\n]s",doj1);
+
+    FILE *fp = fopen("employee_details.txt","r");
+    
+    struct Employee emp;
+
+    while (fscanf(fp, "Employee ID: %d \nEmployee's Name: %s \nDesignation: %s \nDepartment: %s \nDate of joining: %s \nMonthly salary: %d \nIncrement: %d \nDecrement: %d \n\n",
+                  &emp.id, emp.name, emp.designation, emp.department,
+                  emp.doj, &emp.salary, &emp.increment, &emp.decrement) == 8)
+    {
+        
+
+        if (emp.id == searchid || strcmp(emp.designation, designation1) == 0 ||
+            strcmp(emp.department, department1) == 0 ||
+            strcmp(emp.doj, doj1) == 0 ){
+
+        printf("\n\nThe employee's details are displayed below:\n\n");
+        printf("Employee ID: %d\nEmployee's Name: %s\nDesignation: %s\nDepartment: %s\nDate of joining: %s\nMonthly salary: %d\nIncrement: %d\nDecrement: %d\n\n",
+                   emp.id, emp.name, emp.designation, emp.department,
+                   emp.doj, emp.salary, emp.increment, emp.decrement);
+
+                break;
+            }
+            
+        
+        }
+
+        fclose(fp);
+    }
+
+   
+
+
+
+
+
+
+
+
 
 int main(){
 
     int choice;
     
-    printf("\t\tWelcome to our program.");
+    printf("\t\t\tWelcome to our program.");
 
     while(1){
-    printf("\n\n What do you wish to do? \n1.Enter Employee Records.\n2.Display all the Employee records.\n3.Delete an Employee Record.\n4.Update Employee Records.\n5.Exit\n\n");
+    printf("\n\n\nWhat do you wish to do? \n\n1.Enter Employee Records.\t\t2.Display all the Employee records.\n3.Delete an Employee Record.\t\t4.Update Employee Records.\n5.Search an Employee Record\t\t6.Exit\n\n");
 
-    printf("\n\nSelect your choice: ");
+    printf("Select your choice: ");
     scanf("%d",&choice);
 
-   
     switch(choice){
 
         case 1: enteremployee();
@@ -200,19 +255,23 @@ int main(){
 
         case 3: 
                 int deleteid;
-                printf("\nEnter the Employee ID to be deleted:");
+                printf("\nPlease enter the Employee ID to be deleted:");
                 scanf("%d",&deleteid);
 
                 deleterecords(deleteid);
                 break;
 
         case 4: int updateid;
-                printf("\nEnter the ID of the employee to update records: ");
+                printf("\nTo edit records, please input the employee's ID:");
                 scanf("%d", &updateid);
                 
                 updaterecord(updateid);
                 break;
-        case 5: return 0;       
+
+        case 5: searchrecord();
+                break;
+        
+        case 6: return 0;       
     }    
 
     }
