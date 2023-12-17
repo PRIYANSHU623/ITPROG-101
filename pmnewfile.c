@@ -326,6 +326,7 @@ void SalaryRange()
                   }
                 printf("%d",i);
 }
+
 int totalno()
 {
     FILE *fp = fopen("employee_details.txt","r+");
@@ -340,6 +341,7 @@ int totalno()
                     return i;
         fclose(fp);
 }
+
 void topN()
 {
     int N;
@@ -379,63 +381,114 @@ void topN()
     
 }
                   
+void caculatebonus()
+{
+    int id,i,n;
+    printf("Enter ID of employee to calculate bonus : ");
+    scanf("%d",&id);
+    FILE *fp=fopen("employee_details.txt","r+");
+    struct Employee emp;
+    n=totalno();
+     while (i < n && fscanf(fp, "Employee ID: %d\nEmployee's Name: %s\nDesignation: %s\nDepartment: %s\nDate of joining: %s\nMonthly salary: %d\nIncrement: %d\nDecrement: %d\n\n",
+                           &(emp.id), emp.name, emp.designation, emp.department,
+                           emp.doj, &(emp.salary), &(emp.increment), &(emp.decrement)) == 8)
+    {
+        if (id == emp.id)
+        {
+            break;
+        }
+    }
+    int y,bp;//(bp==bonus percentage)
+    printf("Enter Year of Working : ");
+    scanf("%d",&y);
+
+    if(y<3)
+    {
+        bp=1;
+    }
+    if(y>3 && y<5)
+    {
+        bp=5;
+    }
+    else if(y>5 && y<10)
+    {
+        bp=10;
+    }
+    else if(y>10)
+    {
+        bp=20;
+    }
+    printf("%d",bp);
+    printf("%d",emp.salary);
+    int bonus=bp/100.0*emp.salary;
+    int total=emp.salary+bonus;
+    printf("The bonus of the Employee is : %d\n",bonus);
+    printf("Total salary of employee is : %d\n",total);
+} 
 
 
+int main()
+{
 
-int main(){
 
     int choice;
     
     printf("\t\t\tWelcome to our program.");
 
-    while(1){
-    printf("\n\n\nWhat do you wish to do? \n\n1.Enter Employee Records.\t\t2.Display all the Employee records.\n3.Delete an Employee Record.\t\t4.Update Employee Record\n5.Search an Employee Record\t\t6.Calculate the net salary of an Employee.\n7.Generate a pay slip of an Employee\t8.Show the Average salary of all Employees.\n9.Exit\n\n");
+    while(1)
+    {
+        printf("\n\n\nWhat do you wish to do? \n\n1.Enter Employee Records.\t\t2.Display all the Employee records.\n3.Delete an Employee Record.\t\t4.Update Employee Record\n5.Search an Employee Record\t\t6.Calculate the net salary of an Employee.\n7.Generate a pay slip of an Employee\t8.Show the Average salary of all Employees.\n9.Exit\n\n");
 
-    printf("Select your choice: ");
-    scanf("%d",&choice);
+        printf("Select your choice: ");
+        scanf("%d",&choice);
 
-    switch(choice){
+        switch(choice){
 
-        case 1: enteremployee();
-                break;
+            case 1: enteremployee();
+                    break;
 
-        case 2: displayinfo();
-                break;  
-        case 3: 
-                int deleteid;
-                printf("\nPlease enter the Employee ID to be deleted:");
-                scanf("%d",&deleteid);
+            case 2: displayinfo();
+                    break;  
 
-                deleterecords(deleteid);
-                break;
+            case 3: int deleteid;
+                    printf("\nPlease enter the Employee ID to be deleted:");
+                    scanf("%d",&deleteid);
 
-        case 4: int updateid;
-                printf("\nTo edit records, please input the employee's ID:");
-                scanf("%d", &updateid);
-                
-                updaterecord(updateid);
-                break;
+                    deleterecords(deleteid);
+                    break;
 
-        case 5: searchrecord();
-                break;
-        
-        case 6: netsalary();
-                break;
-        
-        case 7: payslip();
-                break;
+            case 4: int updateid;
+                    printf("\nTo edit records, please input the employee's ID:");
+                    scanf("%d", &updateid);
+                    
+                    updaterecord(updateid);
+                    break;
 
-        case 8: avgsalary();
-                break;
-                
-        case 9: SalaryRange();
-                break;
-        case 10:topN();
-                break;
-        case 11:return 0;
+            case 5: searchrecord();
+                    break;
+            
+            case 6: netsalary();
+                    break;
+            
+            case 7: payslip();
+                    break;
 
-    }    
+            case 8: avgsalary();
+                    break;
+                    
+            case 9: SalaryRange();
+                    break;
 
+            case 10:topN();
+                    break;
+
+            case 11:caculatebonus();
+                    break;
+            
+            case 12:return 0;
+
+        }    
     }
+    
    
 }
